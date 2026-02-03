@@ -31,3 +31,16 @@ jobs:
       run: npx playwright install
     - name: Start Tests
       run: npm test
+
+    deploy:
+      needs: build
+      runs-on: ubuntu-latest
+      if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+      steps:
+      - uses: actions/checkout@v4
+      - name: Deploy to production
+        uses: johnbeynon/render-deploy-action@v0.0.8
+        with:
+          service-id: ${{ secrets.SERVICE_ID }}
+          api-key: ${{ secrets.API_KEY }}
+          wait-for-success: true
