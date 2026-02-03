@@ -14,20 +14,20 @@ jobs:
 
     runs-on: ubuntu-latest
 
-    strategy:
-      matrix:
-        node-version: [25.x]
-        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
-
     steps:
     - uses: actions/checkout@v4
-    - name: Use Node.js ${{ matrix.node-version }}
+    - name: Use Node.js 25.x
       uses: actions/setup-node@v4
       with:
-        node-version: ${{ matrix.node-version }}
+        node-version: 25.x
         cache: 'npm'
-    - run: npm ci
-    - run: npm run build --if-present
-    - run: npm server
-    - run: npm start
-    - run: npm test
+    - name: Install node_modules
+      run: npm install
+    - name: Start Server, Build and Run Tests
+      run: npm run server
+    - name: Start app
+      run: npm start
+    - name: Install playwright browsers
+      run: npx playwright install
+    - name: Start Tests
+      run: npm test
